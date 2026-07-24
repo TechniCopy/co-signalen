@@ -290,26 +290,28 @@ const POOL_R4 = [
       "De afzuigkap kan de waakvlam uitblazen, waardoor onverbrand gas het belangrijkste gevaar wordt.",
     ],
     correct: 1,
-    feedbackCorrect: "GOED! De afzuigkap zet de keuken op onderdruk. Daardoor kunnen rookgassen via de trekonderbreker de ruimte in worden getrokken.",
-    feedbackWrong: "De afzuigkap ververst niet, hij zuigt af: er ontstaat onderdruk en die trekt rookgassen via de trekonderbreker de keuken in.",
+    feedbackCorrect: "GOED! De afzuigkap zet de keuken op onderdruk. Daardoor kunnen rookgassen via de trekonderbreker de ruimte in worden getrokken. Deze combinatie is dan ook niet toegestaan: bij open toestellen hoort natuurlijke toe- en afvoerventilatie.",
+    feedbackWrong: "De afzuigkap ververst niet, hij zuigt af: er ontstaat onderdruk en die trekt rookgassen via de trekonderbreker de keuken in. Daarom is deze combinatie ook niet toegestaan.",
     hint: "Wat doet een afzuigkap met de druk in de keuken, en wat betekent dat voor de trekonderbreker?",
     bron: "Kleintje Gas, §2.4.2 en §3.1.4 (onderdruk in de woning bij open toestellen)",
     les: "Onderdruk door een afzuigkap trekt rookgassen via de trekonderbreker naar binnen",
   },
   {
-    // dataset leerdoel 2, vraag 9
-    question: "In een appartement met mechanische afzuiging en een open keukengeiser blijkt de ventilatiebox defect. De geiser brandt verder normaal. Waarom is dit toch een risicosituatie?",
+    // vervangt dataset leerdoel 2, vraag 9 (die combineerde mechanische afzuiging
+    // met een open geiser alsof dat een normale situatie is; die combinatie is
+    // niet toegestaan): toetst nu juist de ventilatie-eis bij open toestellen
+    question: "In een keuken hangt een open geiser met trekonderbreker (type B). De bewoner wil de keuken laten voorzien van mechanische afzuiging. Wat is juist?",
     options: [
-      "Zonder werkende ventilatie schieten de luchttoevoer en de afvoer tekort, waardoor CO zich in de woning kan ophopen.",
-      "Het risico is beperkt: de geiser haalt zijn verbrandingslucht via de trekonderbreker rechtstreeks van buiten.",
-      "Het risico ontstaat pas tijdens het koken; zolang de geiser alleen warm water levert, blijft de situatie veilig.",
+      "Dat is niet toegestaan: in een ruimte met een open toestel mag alleen natuurlijke toe- en afvoerventilatie worden toegepast.",
+      "Dat mag, zolang de afzuiging niet op de hoogste stand draait terwijl de geiser brandt.",
+      "Dat mag, mits er ook een extra ventilatierooster in de gevel wordt aangebracht.",
     ],
     correct: 0,
-    feedbackCorrect: "GOED! De ventilatie is onderdeel van de luchthuishouding van de woning. Valt die uit, dan schieten luchttoevoer en afvoer tekort en kan CO zich ophopen.",
-    feedbackWrong: "De trekonderbreker haalt geen lucht van buiten, en ook zonder koken verbrandt de geiser gas. Zonder werkende ventilatie schiet de luchthuishouding tekort en kan CO zich ophopen.",
-    hint: "Waar haalt een open geiser zijn verbrandingslucht vandaan, en wie zorgt in dit appartement voor verse lucht?",
-    bron: "Kleintje Gas, §2.4.2 en §3.1.4 (uitval ventilatie bij open toestellen)",
-    les: "Uitval van mechanische ventilatie is bij open toestellen een risicosituatie",
+    feedbackCorrect: "GOED! Mechanische afzuiging maakt onderdruk en kan rookgassen via de trekonderbreker de woning in trekken. Bij open toestellen (type A en B) hoort daarom natuurlijke toe- en afvoerventilatie.",
+    feedbackWrong: "Een lagere stand of een extra rooster neemt de onderdruk niet weg. In een ruimte met een open toestel is mechanische afzuiging niet toegestaan: alleen natuurlijke toe- en afvoer.",
+    hint: "Wat doet mechanische afzuiging met de druk in de ruimte, en wat betekent dat voor de trekonderbreker?",
+    bron: "Lesstof BvV CO verlenging, cluster 2.1 (ventilatie bij open toestellen)",
+    les: "Bij open toestellen (type A en B) alleen natuurlijke toe- en afvoerventilatie; mechanische afzuiging is daar niet toegestaan",
   },
 ];
 
@@ -795,9 +797,9 @@ const R3_SIGNALEN = [
 
 const R3_AFLEIDERS = [
   {
-    id: "ventilatiebox",
-    uitleg: "De ventilatiebox zoemt zacht: dat is normaal bedrijf. Werkende ventilatie verlaagt het CO-risico juist.",
-    marker: [524, 25],
+    id: "waterkoker",
+    uitleg: "De waterkoker is elektrisch: geen verbranding, dus geen CO-bron. Kijk naar de verbrandingstoestellen, hun afvoer en de ventilatie.",
+    marker: [683, 236],
   },
   {
     id: "radiator",
@@ -984,9 +986,16 @@ function ZoekplaatSVG({ gevonden, fouten, onKlik }) {
       {/* spoelbak en kraan */}
       <rect x="500" y="252" width="52" height="9" rx="3" fill="#C8C4B8" stroke={C.brownText} strokeWidth="1.5" />
       <path d="M 524 250 v -16 q 0 -8 9 -8 q 8 0 8 7" fill="none" stroke="#8E9AA3" strokeWidth="5" strokeLinecap="round" />
-      {/* waterkoker (decor) */}
-      <path d="M 668 250 v -22 q 0 -5 5 -5 h 18 q 5 0 5 5 v 22 z" fill="#E9E5DA" stroke={C.brownText} strokeWidth="2" />
-      <path d="M 668 234 q -8 2 -6 10 q 2 6 8 5" fill="none" stroke={C.brownText} strokeWidth="2" />
+      {/* waterkoker (afleider: elektrisch, geen CO-bron) */}
+      <g {...clickProps("waterkoker")}>
+        <path d="M 668 250 v -22 q 0 -5 5 -5 h 18 q 5 0 5 5 v 22 z" fill="#E9E5DA" stroke={C.brownText} strokeWidth="2" />
+        <path d="M 668 234 q -8 2 -6 10 q 2 6 8 5" fill="none" stroke={C.brownText} strokeWidth="2" />
+        <rect x="672" y="219" width="16" height="5" rx="2.5" fill="#C8C4B8" stroke={C.brownText} strokeWidth="1.5" />
+        <circle cx="692" cy="246" r="2" fill="#4A7C3F" />
+        {/* snoer naar het stopcontact */}
+        <path d="M 696 250 q 8 -4 10 -12" fill="none" stroke={C.brownText} strokeWidth="1.5" />
+        <rect x="702" y="228" width="10" height="12" rx="2" fill="#E9E5DA" stroke={C.brownText} strokeWidth="1.5" />
+      </g>
       {/* onderkasten */}
       <rect x="496" y="264" width="212" height="62" fill="#D9CDB8" stroke={C.brownText} strokeWidth="2" />
       <line x1="602" y1="264" x2="602" y2="326" stroke="#B7A98C" strokeWidth="2" />
@@ -1021,17 +1030,11 @@ function ZoekplaatSVG({ gevonden, fouten, onKlik }) {
         <rect x="616" y="214" width="6" height="36" fill="#C9963C" />
       </g>
 
-      {/* ── ventilatiebox aan het plafond (afleider) ── */}
-      <g {...clickProps("ventilatiebox")}>
-        <rect x="492" y="8" width="64" height="30" rx="7" fill="#EDEDEA" stroke={C.brownText} strokeWidth="2.5" />
-        <rect x="498" y="14" width="38" height="18" rx="3" fill="#DCDCD6" />
-        {[0, 1, 2, 3].map((i) => (
-          <line key={i} x1={503 + i * 10} y1="16" x2={503 + i * 10} y2="30" stroke="#AFAFA6" strokeWidth="3" />
-        ))}
-        <circle cx="546" cy="23" r="3" fill="#4A7C3F" />
-        {/* zoem-golfjes */}
-        <path d="M 562 12 q 7 11 0 22 M 571 8 q 10 15 0 30" fill="none" stroke="#9B9484" strokeWidth="2.5" strokeLinecap="round" />
-      </g>
+      {/* natuurlijk toevoerrooster in de keukengevel (decor: zo hoort het bij een open toestel) */}
+      <rect x="496" y="12" width="56" height="24" rx="4" fill="#E9E5DA" stroke={C.brownText} strokeWidth="2" />
+      {[0, 1, 2].map((i) => (
+        <line key={i} x1="502" y1={18 + i * 6} x2="546" y2={18 + i * 6} stroke="#9B9484" strokeWidth="2.5" />
+      ))}
 
       {/* markers: gevonden signalen (groen vinkje) en foute klikken (rood kruis, kort) */}
       {R3_SIGNALEN.filter((s) => gevonden.includes(s.id)).map((s) => (
@@ -1170,7 +1173,7 @@ const R4_SETS = [
       {
         id: "d", rang: 1,
         tekst: "Keuken met een open geiser (type B). Tijdens het koken draait de motorafzuigkap op de hoogste stand.",
-        uitleg: "De afzuigkap zet de keuken op onderdruk: rookgassen worden via de trekonderbreker de ruimte in getrokken. Hier maak je je het eerst zorgen over.",
+        uitleg: "De afzuigkap zet de keuken op onderdruk: rookgassen worden via de trekonderbreker de ruimte in getrokken. Deze combinatie is niet toegestaan (bij open toestellen alleen natuurlijke toe- en afvoer), maar je komt hem in de praktijk wel tegen: hier maak je je het eerst zorgen over.",
       },
       {
         id: "e", rang: 2,
@@ -1238,7 +1241,10 @@ function RondeWelkeWoning({ addScore, onDone }) {
         onStart={() => setFase("spel")}
       >
         <UitlegItem term="Verhoogd risico">
-          open toestellen zonder afvoer (type A) en met trekonderbreker (type B), zeker met <b>dichtgezette roosters</b>; woningen die na <b>na-isolatie</b> luchtdicht zijn; <b>uitval van ventilatie</b>; <b>onderdruk</b> door een afzuigkap; en achterstallig onderhoud.
+          open toestellen zonder afvoer (type A) en met trekonderbreker (type B), zeker met <b>dichtgezette roosters</b>; woningen die na <b>na-isolatie</b> luchtdicht zijn; <b>onderdruk</b> door een afzuigkap; en achterstallig onderhoud.
+        </UitlegItem>
+        <UitlegItem term="Ventilatie-eis">
+          in een ruimte met een open toestel hoort <b>natuurlijke toe- en afvoerventilatie</b>. Mechanische afzuiging is daar <b>niet toegestaan</b>: die maakt onderdruk en trekt rookgassen naar binnen. Kom je die combinatie toch tegen, dan is dat een risicosituatie.
         </UitlegItem>
         <UitlegItem term="Gestapelde bouw">
           CO kan ook uit een <b>omliggende woning</b> komen, via schachten, kanalen of een gemeenschappelijke rookgasafvoer.
@@ -1533,7 +1539,7 @@ const LEERMOMENTEN = [
   "De vroege symptomen (hoofdpijn, misselijkheid, vermoeidheid) lijken op een griepje; daardoor wordt CO-vergiftiging vaak niet herkend",
   "Concentratie maal tijdsduur bepaalt de ernst: kort in een hoge concentratie is net zo gevaarlijk als lang in een lagere",
   "Signalen aan de installatie: geel-oranje vlam, roet of corrosie, een losse of lekkende afvoer, condens en een bedompte, muffe lucht",
-  "Verhoogd risico bij open toestellen (type A en B), dichte roosters, na-isolatie, ventilatie-uitval en onderdruk; in gestapelde bouw kan CO uit een omliggende woning komen",
+  "Verhoogd risico bij open toestellen (type A en B), dichte roosters, na-isolatie en onderdruk; bij open toestellen hoort natuurlijke toe- en afvoerventilatie (mechanische afzuiging is daar niet toegestaan); in gestapelde bouw kan CO uit een omliggende woning komen",
   "Klachten die buitenshuis verdwijnen zijn een CO-signaal; bij eigen klachten direct naar buiten en meten, met je persoonlijke CO-melder op borsthoogte",
 ];
 
