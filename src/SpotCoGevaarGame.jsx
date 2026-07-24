@@ -651,25 +651,27 @@ function RondeConcentratieTijd({ addScore, onDone }) {
   const [idx, setIdx] = useState(0);
   const [hint, setHint] = useState(null);
   const [laatste, setLaatste] = useState(null);
+  const [flash, setFlash] = useState(null); // korte kleur-feedback op de aangeklikte knop
   const [popup, setPopup] = useState(false);
 
   const kaart = R2_KAARTEN[idx];
   const spiekOpen = idx < 2;
 
-  const drop = (zoneId) => (payload) => {
-    if (popup || payload !== kaart.id) return undefined;
+  const kies = (zoneId) => {
+    if (popup) return;
+    setFlash({ zone: zoneId, type: zoneId === kaart.zone ? "correct" : "wrong" });
+    setTimeout(() => setFlash(null), 450);
     if (zoneId === kaart.zone) {
       addScore(5);
       setHint(null);
       setLaatste(kaart.uitlegGoed);
       if (idx + 1 >= R2_KAARTEN.length) setPopup(true);
       else setIdx(idx + 1);
-      return "correct";
+    } else {
+      addScore(-5);
+      setLaatste(null);
+      setHint(kaart.hintFout);
     }
-    addScore(-5);
-    setLaatste(null);
-    setHint(kaart.hintFout);
-    return "wrong";
   };
 
   if (fase === "uitleg") {
@@ -699,7 +701,7 @@ function RondeConcentratieTijd({ addScore, onDone }) {
         Ronde 2: Concentratie maal tijd
       </h2>
       <p className="text-xs mb-3 text-center font-medium" style={{ color: C.brown }}>
-        Sleep de scenariokaart naar het gevolg dat je verwacht (of tik op de kaart en daarna op het vak). Scenario {idx + 1} van {R2_KAARTEN.length}.
+        Lees de scenariokaart en klik of tik op het gevolg dat je verwacht. Scenario {idx + 1} van {R2_KAARTEN.length}.
       </p>
 
       <UitlegStrook key={spiekOpen ? "open" : "dicht"} title="Spiekbriefje: de tabel" defaultOpen={spiekOpen}>
@@ -708,36 +710,35 @@ function RondeConcentratieTijd({ addScore, onDone }) {
         <p><b>Duizenden ppm</b>: binnen minuten tot een half uur fataal.</p>
       </UitlegStrook>
 
-      <Draggable payload={kaart.id}>
-        <div
-          className="rounded-2xl border-2 px-6 py-3 shadow-md text-center select-none"
-          style={{ backgroundColor: C.bgCard, borderColor: C.brownText, cursor: "grab" }}
-        >
-          <p className="text-2xl font-bold italic" style={{ color: C.brownText }}>{kaart.ppm}</p>
-          <p className="text-xs font-medium" style={{ color: C.brown }}>{kaart.duur}</p>
-          {kaart.hulp && (
-            <p className="text-[11px] mt-1 italic font-medium" style={{ color: C.olive }}>Hulp: {kaart.hulp}</p>
-          )}
-        </div>
-      </Draggable>
+      <div
+        className="rounded-2xl border-2 px-6 py-3 shadow-md text-center select-none"
+        style={{ backgroundColor: C.bgCard, borderColor: C.brownText }}
+      >
+        <p className="text-2xl font-bold italic" style={{ color: C.brownText }}>{kaart.ppm}</p>
+        <p className="text-xs font-medium" style={{ color: C.brown }}>{kaart.duur}</p>
+        {kaart.hulp && (
+          <p className="text-[11px] mt-1 italic font-medium" style={{ color: C.olive }}>Hulp: {kaart.hulp}</p>
+        )}
+      </div>
 
       <div className="flex flex-col gap-2 w-full max-w-md mt-4">
-        {R2_ZONES.map((zone) => (
-          <DropTarget key={zone.id} id={zone.id} onDropItem={drop(zone.id)}>
-            {({ isHover, flash }) => (
-              <div
-                className="rounded-xl border-2 px-4 py-3 text-center transition-all"
-                style={{
-                  borderColor: flash === "wrong" ? C.red : flash === "correct" || isHover ? C.green : zone.kleur,
-                  backgroundColor: flash === "wrong" ? C.redLight : isHover ? C.greenLight : zone.licht,
-                }}
-              >
-                <p className="text-sm font-bold" style={{ color: zone.kleur }}>{zone.titel}</p>
-                <p className="text-[10px] italic" style={{ color: C.brown }}>{zone.sub}</p>
-              </div>
-            )}
-          </DropTarget>
-        ))}
+        {R2_ZONES.map((zone) => {
+          const f = flash?.zone === zone.id ? flash.type : null;
+          return (
+            <button
+              key={zone.id}
+              onClick={() => kies(zone.id)}
+              className="rounded-xl border-2 px-4 py-3 text-center transition-all hover:shadow-md active:scale-[0.98]"
+              style={{
+                borderColor: f === "wrong" ? C.red : f === "correct" ? C.green : zone.kleur,
+                backgroundColor: f === "wrong" ? C.redLight : f === "correct" ? C.greenLight : zone.licht,
+              }}
+            >
+              <p className="text-sm font-bold" style={{ color: zone.kleur }}>{zone.titel}</p>
+              <p className="text-[10px] italic" style={{ color: C.brown }}>{zone.sub}</p>
+            </button>
+          );
+        })}
       </div>
 
       {hint && (
