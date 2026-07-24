@@ -769,27 +769,27 @@ const R3_SIGNALEN = [
   {
     id: "vlam", label: "Geel-oranje vlam in de gashaard",
     uitleg: "Een gezonde vlam is blauw. Geel-oranje betekent zuurstoftekort: onvolledige verbranding, en daarbij kan CO ontstaan.",
-    marker: [300, 208],
+    marker: [315, 212],
   },
   {
     id: "condens", label: "Condens op het raam",
     uitleg: "Aanhoudend beslagen ramen en vochtplekken kunnen erop wijzen dat verbrandingsgassen niet goed worden afgevoerd.",
-    marker: [115, 110],
+    marker: [121, 116],
   },
   {
     id: "roet", label: "Roetspoor boven de haard",
     uitleg: "Roet, roest of corrosie op of rond een toestel wijst op een slechte verbranding of een lekkende afvoer.",
-    marker: [300, 68],
+    marker: [314, 64],
   },
   {
     id: "rooster", label: "Dichtgeplakt ventilatierooster",
     uitleg: "Zonder vrije luchttoevoer krijgt een open toestel te weinig zuurstof: precies zo ontstaat CO.",
-    marker: [445, 218],
+    marker: [446, 220],
   },
   {
     id: "afvoer", label: "Losliggende rookgasafvoer",
     uitleg: "Door een losliggende of lekkende rookgasafvoer stromen verbrandingsgassen zo de woning in.",
-    marker: [612, 62],
+    marker: [614, 52],
   },
 ];
 
@@ -797,17 +797,17 @@ const R3_AFLEIDERS = [
   {
     id: "ventilatiebox",
     uitleg: "De ventilatiebox zoemt zacht: dat is normaal bedrijf. Werkende ventilatie verlaagt het CO-risico juist.",
-    marker: [524, 30],
+    marker: [524, 25],
   },
   {
     id: "radiator",
     uitleg: "Droge, warme lucht bij een radiator is normaal. Let juist op het omgekeerde: vochtige, bedompte lucht.",
-    marker: [115, 268],
+    marker: [121, 272],
   },
   {
     id: "plant",
     uitleg: "De plant doet niemand kwaad. Kijk naar het toestel, de afvoer, de roosters en de ramen.",
-    marker: [452, 300],
+    marker: [456, 300],
   },
 ];
 
@@ -821,110 +821,216 @@ function ZoekplaatSVG({ gevonden, fouten, onKlik }) {
   });
   return (
     <svg viewBox="0 0 720 400" width="100%" role="img" aria-label="Zoekplaat: woonkamer met gashaard en keuken met geiser">
-      {/* muren en vloer */}
-      <rect x="0" y="0" width="480" height="330" fill="#F0E8D8" />
-      <rect x="480" y="0" width="240" height="330" fill="#EAE0CC" />
+      {/* muren, plint en vloer */}
+      <rect x="0" y="0" width="480" height="326" fill="#F0E8D8" />
+      <rect x="480" y="0" width="240" height="326" fill="#EAE0CC" />
+      <rect x="0" y="318" width="720" height="12" fill="#DCCFB4" stroke={C.brownText} strokeWidth="1.5" />
       <rect x="0" y="330" width="720" height="70" fill="#C9B891" />
-      <line x1="0" y1="330" x2="720" y2="330" stroke={C.brownText} strokeWidth="2" />
-      <line x1="480" y1="0" x2="480" y2="330" stroke="#C9B891" strokeWidth="4" />
+      {[80, 240, 400, 560].map((x) => (
+        <line key={x} x1={x} y1="330" x2={x + 60} y2="400" stroke="#B9A87E" strokeWidth="2" />
+      ))}
+      <line x1="0" y1="352" x2="720" y2="358" stroke="#B9A87E" strokeWidth="1.5" />
+      <line x1="0" y1="376" x2="720" y2="384" stroke="#B9A87E" strokeWidth="1.5" />
+      <line x1="480" y1="0" x2="480" y2="318" stroke="#C9B891" strokeWidth="5" />
+
+      {/* vloerkleed (decor) */}
+      <ellipse cx="315" cy="360" rx="120" ry="22" fill="#A8760C" opacity="0.35" />
+      <ellipse cx="315" cy="360" rx="92" ry="15" fill="none" stroke="#8A6B3F" strokeWidth="2" opacity="0.5" />
+
+      {/* schilderijtje (decor) */}
+      <rect x="216" y="52" width="34" height="44" rx="2" fill="#FFFCF5" stroke="#8A6B3F" strokeWidth="3" />
+      <path d="M 220 84 l 9 -12 6 7 8 -13 9 18 z" fill="#5C6B2E" opacity="0.8" />
+      <circle cx="240" cy="62" r="3.5" fill="#E8B93C" />
+
+      {/* wandklok in de keuken (decor) */}
+      <circle cx="678" cy="76" r="20" fill="#FFFCF5" stroke={C.brownText} strokeWidth="2.5" />
+      <line x1="678" y1="76" x2="678" y2="63" stroke={C.brownText} strokeWidth="2" strokeLinecap="round" />
+      <line x1="678" y1="76" x2="687" y2="80" stroke={C.brownText} strokeWidth="2" strokeLinecap="round" />
+      <circle cx="678" cy="76" r="2" fill={C.brownText} />
 
       {/* ── raam met condens (signaal) ── */}
       <g {...clickProps("condens")}>
-        <rect x="40" y="40" width="150" height="140" rx="4" fill="#6B4F2A" />
-        <rect x="48" y="48" width="64" height="58" fill="#C8DEE9" />
-        <rect x="118" y="48" width="64" height="58" fill="#C8DEE9" />
-        <rect x="48" y="114" width="64" height="58" fill="#BFD8E4" />
-        <rect x="118" y="114" width="64" height="58" fill="#BFD8E4" />
-        {/* condens: waas en druppelsporen onderin de ruiten */}
-        <ellipse cx="80" cy="158" rx="30" ry="14" fill="white" opacity="0.75" />
-        <ellipse cx="150" cy="160" rx="30" ry="13" fill="white" opacity="0.75" />
-        <ellipse cx="80" cy="98" rx="26" ry="9" fill="white" opacity="0.55" />
-        <ellipse cx="150" cy="96" rx="26" ry="9" fill="white" opacity="0.55" />
-        <path d="M 62 140 v 26 M 96 146 v 22 M 132 142 v 26 M 166 148 v 20" stroke="#9CC3D5" strokeWidth="3" strokeLinecap="round" />
-        <circle cx="62" cy="168" r="2.5" fill="#9CC3D5" />
-        <circle cx="132" cy="170" r="2.5" fill="#9CC3D5" />
+        {/* kozijn en ruiten */}
+        <rect x="34" y="40" width="174" height="150" rx="4" fill="#6B4F2A" />
+        <rect x="42" y="48" width="76" height="63" fill="#C6DCEA" />
+        <rect x="124" y="48" width="76" height="63" fill="#C6DCEA" />
+        <rect x="42" y="119" width="76" height="63" fill="#B9D2E2" />
+        <rect x="124" y="119" width="76" height="63" fill="#B9D2E2" />
+        {/* heuvels en zon achter het glas, half weggevaagd door de waas */}
+        <path d="M 42 100 q 18 -14 38 0 q 20 -12 38 11 h -76 z" fill="#9DBBAB" opacity="0.5" />
+        <circle cx="102" cy="60" r="8" fill="#F3D34A" opacity="0.55" />
+        {/* condenswaas: dikke witte laag die van onderaf optrekt */}
+        <path d="M 42 74 q 12 -8 24 -2 q 14 -9 26 0 q 16 -7 26 3 v 36 h -76 z" fill="white" opacity="0.55" />
+        <path d="M 124 70 q 14 -9 27 -1 q 13 -8 27 1 q 12 -6 22 4 v 37 h -76 z" fill="white" opacity="0.55" />
+        <path d="M 42 132 q 12 -9 25 -2 q 13 -8 26 1 q 13 -7 25 3 v 48 h -76 z" fill="white" opacity="0.85" />
+        <path d="M 124 128 q 13 -9 26 -1 q 13 -8 26 2 q 12 -6 24 3 v 50 h -76 z" fill="white" opacity="0.85" />
+        {/* druppelsporen die door de waas naar beneden lopen */}
+        {[
+          [56, 128, 34], [76, 138, 30], [98, 132, 38], [136, 130, 36], [158, 140, 28], [182, 134, 36],
+        ].map(([x, y, l], i) => (
+          <g key={i}>
+            <line x1={x} y1={y} x2={x} y2={y + l} stroke="#7FA9C2" strokeWidth="3.5" strokeLinecap="round" />
+            <circle cx={x} cy={y + l + 3} r="3.5" fill="#7FA9C2" />
+          </g>
+        ))}
+        {/* losse druppels in de waas */}
+        {[[64, 152], [88, 160], [110, 150], [130, 158], [150, 152], [172, 162], [190, 152]].map(([x, y], i) => (
+          <circle key={i} cx={x} cy={y} r="2.2" fill="#8FB8CC" />
+        ))}
+        {/* raamkruis er weer overheen */}
+        <rect x="114" y="44" width="8" height="142" fill="#6B4F2A" />
+        <rect x="40" y="111" width="162" height="8" fill="#6B4F2A" />
+        {/* vensterbank met vochtplek op de muur eronder */}
+        <rect x="26" y="190" width="190" height="12" rx="3" fill="#8A6B3F" stroke={C.brownText} strokeWidth="1.5" />
+        <path d="M 74 202 q 14 10 8 22 q 16 -4 22 8 q -26 6 -44 -4 q -6 -16 14 -26 z" fill="#C9BFA8" opacity="0.7" />
       </g>
 
       {/* ── radiator (afleider) ── */}
       <g {...clickProps("radiator")}>
-        <rect x="52" y="242" width="126" height="56" rx="6" fill="#E6E2D8" stroke={C.brownText} strokeWidth="2" />
-        {[0, 1, 2, 3, 4, 5].map((i) => (
-          <rect key={i} x={60 + i * 19} y="248" width="12" height="44" rx="3" fill="#D5D0C2" stroke="#B7B1A0" strokeWidth="1" />
-        ))}
         {/* warmtegolfjes */}
-        <path d="M 80 232 q 4 -7 0 -13 M 112 232 q 4 -7 0 -13 M 144 232 q 4 -7 0 -13" fill="none" stroke="#C4A96A" strokeWidth="2" strokeLinecap="round" />
+        <path d="M 84 236 q 5 -8 0 -16 M 116 236 q 5 -8 0 -16 M 148 236 q 5 -8 0 -16" fill="none" stroke="#C4A96A" strokeWidth="2.5" strokeLinecap="round" />
+        <rect x="52" y="244" width="140" height="58" rx="7" fill="#E9E5DA" stroke={C.brownText} strokeWidth="2.5" />
+        <rect x="58" y="240" width="128" height="7" rx="3.5" fill="#D5D0C2" stroke="#B7B1A0" strokeWidth="1" />
+        {[0, 1, 2, 3, 4, 5, 6].map((i) => (
+          <rect key={i} x={60 + i * 18} y="252" width="12" height="44" rx="4" fill="#D5D0C2" stroke="#B7B1A0" strokeWidth="1" />
+        ))}
+        {/* thermostaatknop en leidingen */}
+        <circle cx="46" cy="252" r="7" fill="#FFFCF5" stroke={C.brownText} strokeWidth="2" />
+        <line x1="46" y1="248" x2="46" y2="252" stroke={C.brownText} strokeWidth="2" />
+        <rect x="62" y="302" width="6" height="24" fill="#B7B1A0" />
+        <rect x="176" y="302" width="6" height="24" fill="#B7B1A0" />
       </g>
 
       {/* ── roetspoor boven de haard (signaal) ── */}
       <g {...clickProps("roet")}>
-        <rect x="288" y="30" width="24" height="120" fill="#8E9AA3" stroke={C.brownText} strokeWidth="2" />
-        <ellipse cx="300" cy="52" rx="42" ry="20" fill="#4E4A44" opacity="0.65" />
-        <ellipse cx="286" cy="76" rx="30" ry="14" fill="#4E4A44" opacity="0.5" />
-        <ellipse cx="316" cy="84" rx="26" ry="12" fill="#4E4A44" opacity="0.45" />
+        {/* kanaal naar het plafond */}
+        <rect x="302" y="24" width="26" height="128" fill="#8E9AA3" stroke={C.brownText} strokeWidth="2" />
+        <rect x="298" y="24" width="34" height="8" fill="#7A868F" stroke={C.brownText} strokeWidth="1.5" />
+        <line x1="302" y1="60" x2="328" y2="60" stroke="#7A868F" strokeWidth="2" />
+        <line x1="302" y1="96" x2="328" y2="96" stroke="#7A868F" strokeWidth="2" />
+        {/* roetwolk rond het kanaal, met vegen en spikkels */}
+        <ellipse cx="315" cy="52" rx="46" ry="21" fill="#4E4A44" opacity="0.6" />
+        <ellipse cx="296" cy="78" rx="34" ry="15" fill="#4E4A44" opacity="0.5" />
+        <ellipse cx="334" cy="86" rx="28" ry="13" fill="#4E4A44" opacity="0.45" />
+        <path d="M 284 108 q 10 -8 22 -3 q 14 -6 24 2 q -22 10 -46 1 z" fill="#4E4A44" opacity="0.35" />
+        {[[268, 60], [278, 92], [352, 66], [346, 96], [312, 110], [360, 46]].map(([x, y], i) => (
+          <circle key={i} cx={x} cy={y} r="2.2" fill="#4E4A44" opacity="0.55" />
+        ))}
       </g>
 
       {/* ── gashaard met geel-oranje vlam (signaal) ── */}
       <g {...clickProps("vlam")}>
-        <rect x="240" y="150" width="120" height="110" rx="8" fill="#4A4741" stroke={C.brownText} strokeWidth="2.5" />
-        <rect x="252" y="164" width="96" height="70" rx="6" fill="#2B2926" />
-        <rect x="256" y="168" width="88" height="62" rx="4" fill="#1C1B19" />
-        {/* vlammen: geel-oranje in plaats van blauw */}
+        {/* romp */}
+        <rect x="248" y="150" width="134" height="132" rx="10" fill="#46423C" stroke={C.brownText} strokeWidth="2.5" />
+        <rect x="254" y="144" width="122" height="10" rx="4" fill="#5A554E" stroke={C.brownText} strokeWidth="1.5" />
+        {/* ruit met vlambeeld */}
+        <rect x="262" y="166" width="106" height="84" rx="7" fill="#2B2926" />
+        <rect x="267" y="171" width="96" height="74" rx="5" fill="#171614" />
+        {/* houtblokken */}
+        <rect x="284" y="232" width="62" height="9" rx="4.5" fill="#6B4426" stroke="#4A2E18" strokeWidth="1.5" />
+        <rect x="296" y="224" width="42" height="9" rx="4.5" fill="#7C5230" stroke="#4A2E18" strokeWidth="1.5" />
+        {/* gloed + vlammen: geel-oranje in plaats van blauw */}
+        <ellipse cx="315" cy="228" rx="38" ry="16" fill="#E8930C" opacity="0.25" style={{ animation: "pulseGlow 1.8s ease-in-out infinite" }} />
         <g style={{ animation: "vlamFlikker 0.9s ease-in-out infinite", transformBox: "fill-box", transformOrigin: "center bottom" }}>
-          <path d="M 272 226 q -6 -18 6 -30 q 2 12 10 14 q -2 -16 10 -24 q 4 14 12 18 q 0 -12 8 -18 q 6 16 2 26 q 8 -2 8 -10 q 8 16 -4 24 z" fill="#E8930C" />
-          <path d="M 282 226 q -2 -12 6 -18 q 2 8 8 10 q 0 -10 8 -14 q 4 10 8 12 q 2 8 -2 10 z" fill="#F3C94A" />
+          <path d="M 282 228 q -7 -22 7 -36 q 3 14 12 17 q -3 -20 12 -29 q 5 17 14 22 q 0 -15 10 -22 q 7 19 2 31 q 9 -2 10 -12 q 10 19 -5 29 z" fill="#D9720F" />
+          <path d="M 290 228 q -4 -16 8 -25 q 3 11 11 13 q -1 -14 11 -19 q 5 13 11 16 q 3 11 -3 15 z" fill="#E8930C" />
+          <path d="M 300 228 q -2 -11 6 -16 q 3 7 8 8 q 1 -9 8 -12 q 4 9 6 12 q 2 6 -3 8 z" fill="#F3C94A" />
+          <path d="M 308 228 q 0 -7 5 -10 q 3 5 7 6 q 2 4 -1 4 h -11 z" fill="#F9E27A" />
         </g>
-        <rect x="252" y="238" width="96" height="8" rx="3" fill="#6B675F" />
+        {/* luchtrooster en handgreep */}
+        <rect x="262" y="256" width="106" height="9" rx="4" fill="#5A554E" />
+        {[0, 1, 2, 3, 4, 5].map((i) => (
+          <line key={i} x1={272 + i * 18} y1="257" x2={272 + i * 18} y2="264" stroke="#3A3733" strokeWidth="3" />
+        ))}
+        <rect x="372" y="196" width="6" height="26" rx="3" fill="#8E8880" stroke={C.brownText} strokeWidth="1" />
         {/* pootjes */}
-        <rect x="252" y="260" width="12" height="14" fill="#4A4741" />
-        <rect x="336" y="260" width="12" height="14" fill="#4A4741" />
+        <rect x="258" y="282" width="14" height="16" fill="#46423C" stroke={C.brownText} strokeWidth="1.5" />
+        <rect x="358" y="282" width="14" height="16" fill="#46423C" stroke={C.brownText} strokeWidth="1.5" />
       </g>
 
       {/* ── dichtgeplakt ventilatierooster (signaal) ── */}
       <g {...clickProps("rooster")}>
-        <rect x="418" y="196" width="54" height="42" rx="4" fill="#E6E2D8" stroke={C.brownText} strokeWidth="2" />
+        <rect x="414" y="196" width="64" height="48" rx="5" fill="#E9E5DA" stroke={C.brownText} strokeWidth="2.5" />
+        <rect x="420" y="202" width="52" height="36" rx="3" fill="#D5D0C2" />
         {[0, 1, 2, 3].map((i) => (
-          <line key={i} x1="424" y1={205 + i * 8} x2="466" y2={205 + i * 8} stroke="#9B9484" strokeWidth="3" />
+          <line key={i} x1="424" y1={208 + i * 8.5} x2="468" y2={208 + i * 8.5} stroke="#8F8874" strokeWidth="3.5" />
         ))}
-        {/* tape eroverheen */}
-        <rect x="410" y="207" width="70" height="13" fill="#E8D9A8" opacity="0.92" transform="rotate(-14 445 213)" stroke="#C9B368" strokeWidth="1" />
-        <rect x="410" y="215" width="70" height="13" fill="#E8D9A8" opacity="0.92" transform="rotate(12 445 221)" stroke="#C9B368" strokeWidth="1" />
+        {/* tape: twee gekruiste stroken met randlijnen en een los plakstukje */}
+        <g transform="rotate(-13 446 217)">
+          <rect x="404" y="210" width="84" height="15" fill="#EFE0B0" opacity="0.95" stroke="#C9B368" strokeWidth="1.5" />
+          <line x1="404" y1="217" x2="488" y2="217" stroke="#DECf95" strokeWidth="2" />
+        </g>
+        <g transform="rotate(11 446 224)">
+          <rect x="404" y="217" width="84" height="15" fill="#EFE0B0" opacity="0.95" stroke="#C9B368" strokeWidth="1.5" />
+        </g>
+        <rect x="408" y="192" width="22" height="11" fill="#EFE0B0" opacity="0.95" stroke="#C9B368" strokeWidth="1.2" transform="rotate(-24 419 197)" />
       </g>
 
       {/* ── plant (afleider) ── */}
       <g {...clickProps("plant")}>
-        <path d="M 440 322 h 26 l -4 -26 h -18 z" fill="#B06A3B" stroke={C.brownText} strokeWidth="1.5" />
-        <path d="M 452 296 q -14 -16 -6 -32 q 10 8 8 24 q 2 -20 14 -26 q 4 16 -10 28 q 12 -10 20 -6 q -6 12 -20 14 z" fill="#5C6B2E" />
+        <path d="M 440 330 h 32 l -5 -32 h -22 z" fill="#B06A3B" stroke={C.brownText} strokeWidth="2" />
+        <rect x="436" y="294" width="40" height="8" rx="3" fill="#9A5A30" stroke={C.brownText} strokeWidth="1.5" />
+        <path d="M 456 294 q -18 -18 -8 -40 q 12 10 10 30 q 2 -24 17 -32 q 5 20 -13 36 q 14 -12 24 -7 q -7 15 -24 17 z" fill="#5C6B2E" />
+        <path d="M 452 294 q -12 -8 -22 -6 q 5 10 18 10 z" fill="#4A5725" />
+        <line x1="456" y1="294" x2="452" y2="268" stroke="#4A5725" strokeWidth="2" strokeLinecap="round" />
       </g>
 
-      {/* ── keuken: aanrecht ── */}
-      <rect x="492" y="250" width="220" height="14" fill="#8A6B3F" stroke={C.brownText} strokeWidth="2" />
-      <rect x="500" y="264" width="204" height="66" fill="#D9CDB8" stroke={C.brownText} strokeWidth="2" />
-      <line x1="602" y1="264" x2="602" y2="330" stroke="#B7A98C" strokeWidth="2" />
-      <circle cx="590" cy="296" r="4" fill="#6B4F2A" />
-      <circle cx="614" cy="296" r="4" fill="#6B4F2A" />
+      {/* ── keuken: bovenkastje, aanrecht met spoelbak (decor) ── */}
+      <rect x="488" y="56" width="60" height="44" rx="4" fill="#D9CDB8" stroke={C.brownText} strokeWidth="2" />
+      <line x1="518" y1="56" x2="518" y2="100" stroke="#B7A98C" strokeWidth="2" />
+      <circle cx="512" cy="78" r="2.5" fill="#6B4F2A" />
+      <circle cx="524" cy="78" r="2.5" fill="#6B4F2A" />
+      <rect x="488" y="250" width="228" height="14" rx="3" fill="#8A6B3F" stroke={C.brownText} strokeWidth="2" />
+      {/* spoelbak en kraan */}
+      <rect x="500" y="252" width="52" height="9" rx="3" fill="#C8C4B8" stroke={C.brownText} strokeWidth="1.5" />
+      <path d="M 524 250 v -16 q 0 -8 9 -8 q 8 0 8 7" fill="none" stroke="#8E9AA3" strokeWidth="5" strokeLinecap="round" />
+      {/* waterkoker (decor) */}
+      <path d="M 668 250 v -22 q 0 -5 5 -5 h 18 q 5 0 5 5 v 22 z" fill="#E9E5DA" stroke={C.brownText} strokeWidth="2" />
+      <path d="M 668 234 q -8 2 -6 10 q 2 6 8 5" fill="none" stroke={C.brownText} strokeWidth="2" />
+      {/* onderkasten */}
+      <rect x="496" y="264" width="212" height="62" fill="#D9CDB8" stroke={C.brownText} strokeWidth="2" />
+      <line x1="602" y1="264" x2="602" y2="326" stroke="#B7A98C" strokeWidth="2" />
+      <rect x="586" y="288" width="7" height="16" rx="3" fill="#6B4F2A" />
+      <rect x="611" y="288" width="7" height="16" rx="3" fill="#6B4F2A" />
 
       {/* ── geiser met losliggende afvoer (signaal) ── */}
       <g {...clickProps("afvoer")}>
-        {/* afvoerpijp: onderste deel recht, bovenste deel verschoven met zichtbare kier */}
-        <rect x="592" y="74" width="20" height="36" fill="#9AA1A8" stroke={C.brownText} strokeWidth="2" />
-        <rect x="604" y="18" width="20" height="46" fill="#9AA1A8" stroke={C.brownText} strokeWidth="2" transform="rotate(8 614 41)" />
-        {/* kier-accent */}
-        <path d="M 590 70 l 26 -6" stroke={C.red} strokeWidth="0" />
+        {/* onderste pijpdeel: zit nog vast op de geiser */}
+        <rect x="590" y="58" width="22" height="34" fill="#9AA1A8" stroke={C.brownText} strokeWidth="2" />
+        <rect x="586" y="88" width="30" height="7" rx="2" fill="#7A868F" stroke={C.brownText} strokeWidth="1.5" />
+        {/* bovenste pijpdeel: verschoven en scheef, met zichtbare kier */}
+        <g transform="rotate(9 617 32)">
+          <rect x="606" y="8" width="22" height="44" fill="#9AA1A8" stroke={C.brownText} strokeWidth="2" />
+          <rect x="602" y="44" width="30" height="7" rx="2" fill="#7A868F" stroke={C.brownText} strokeWidth="1.5" />
+        </g>
+        {/* rookgas dat uit de kier lekt */}
+        <path d="M 600 54 q -8 -8 -2 -16 q -8 -4 -4 -12" fill="none" stroke="#8E9AA3" strokeWidth="3" strokeLinecap="round" opacity="0.8" style={{ animation: "pulseGlow 1.6s ease-in-out infinite" }} />
+        <path d="M 590 58 q -10 -4 -8 -14" fill="none" stroke="#A9AFB5" strokeWidth="2.5" strokeLinecap="round" opacity="0.6" style={{ animation: "pulseGlow 2.1s ease-in-out infinite" }} />
         {/* geiser */}
-        <rect x="566" y="110" width="72" height="104" rx="10" fill="#F4F2EC" stroke={C.brownText} strokeWidth="2.5" />
-        <rect x="580" y="126" width="44" height="26" rx="4" fill="#DCE8C6" stroke={C.brownText} strokeWidth="1.5" />
-        <circle cx="602" cy="182" r="14" fill="#E6E2D8" stroke={C.brownText} strokeWidth="2" />
-        <path d="M 596 186 q 6 -14 12 0 q -6 8 -12 0" fill="#5B8FB3" />
+        <rect x="560" y="96" width="82" height="118" rx="11" fill="#F4F2EC" stroke={C.brownText} strokeWidth="2.5" />
+        <rect x="588" y="92" width="26" height="8" fill="#E6E2D8" stroke={C.brownText} strokeWidth="1.5" />
+        <rect x="574" y="112" width="54" height="28" rx="4" fill="#DCE8C6" stroke={C.brownText} strokeWidth="1.5" />
+        <rect x="580" y="120" width="28" height="5" rx="2.5" fill="#9BB08A" />
+        <circle cx="620" cy="126" r="4" fill="#C0392B" />
+        {/* kijkglas met waakvlam */}
+        <circle cx="601" cy="172" r="15" fill="#E6E2D8" stroke={C.brownText} strokeWidth="2" />
+        <circle cx="601" cy="172" r="9" fill="#2B2926" />
+        <path d="M 597 176 q 4 -10 8 0 q -4 6 -8 0" fill="#5B8FB3" />
+        {/* leidingen naar het aanrecht */}
+        <rect x="578" y="214" width="6" height="36" fill="#B7B1A0" />
+        <rect x="616" y="214" width="6" height="36" fill="#C9963C" />
       </g>
 
       {/* ── ventilatiebox aan het plafond (afleider) ── */}
       <g {...clickProps("ventilatiebox")}>
-        <rect x="496" y="8" width="56" height="26" rx="6" fill="#EDEDEA" stroke={C.brownText} strokeWidth="2" />
-        {[0, 1, 2].map((i) => (
-          <line key={i} x1={504 + i * 14} y1="14" x2={504 + i * 14} y2="28" stroke="#B7B1A0" strokeWidth="3" />
+        <rect x="492" y="8" width="64" height="30" rx="7" fill="#EDEDEA" stroke={C.brownText} strokeWidth="2.5" />
+        <rect x="498" y="14" width="38" height="18" rx="3" fill="#DCDCD6" />
+        {[0, 1, 2, 3].map((i) => (
+          <line key={i} x1={503 + i * 10} y1="16" x2={503 + i * 10} y2="30" stroke="#AFAFA6" strokeWidth="3" />
         ))}
+        <circle cx="546" cy="23" r="3" fill="#4A7C3F" />
         {/* zoem-golfjes */}
-        <path d="M 560 14 q 6 7 0 14 M 568 10 q 9 11 0 22" fill="none" stroke="#9B9484" strokeWidth="2" strokeLinecap="round" />
+        <path d="M 562 12 q 7 11 0 22 M 571 8 q 10 15 0 30" fill="none" stroke="#9B9484" strokeWidth="2.5" strokeLinecap="round" />
       </g>
 
       {/* markers: gevonden signalen (groen vinkje) en foute klikken (rood kruis, kort) */}
