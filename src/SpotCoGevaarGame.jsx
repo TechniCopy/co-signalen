@@ -39,6 +39,33 @@ function meldVoortgang(payload) {
   }
 }
 
+// ─── SCHUDDEN (Fisher-Yates) ───
+//
+// Kaartjes en antwoorden staan in de code in een logische volgorde. Zonder
+// schudden staat het juiste rijtje meteen goed en kan de cursist het patroon
+// aflezen in plaats van de stof toepassen. Elke ronde krijgt bij het opstarten
+// een eigen volgorde.
+
+function schud(lijst) {
+  const kopie = [...lijst];
+  for (let i = kopie.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [kopie[i], kopie[j]] = [kopie[j], kopie[i]];
+  }
+  return kopie;
+}
+
+// Schudt de antwoordopties van een scenario en berekent de nieuwe index van
+// het juiste antwoord.
+function schudOpties(scenario) {
+  const volgorde = schud(scenario.opties.map((_, i) => i));
+  return {
+    ...scenario,
+    opties: volgorde.map((i) => scenario.opties[i]),
+    goed: volgorde.indexOf(scenario.goed),
+  };
+}
+
 // ─── MC-VRAGENPOOLS ───
 // Basis: de examenvragen van leerdoelen 1 en 2 uit de dataset (cluster 2.1),
 // aangevuld met een eigen variant.
@@ -438,8 +465,10 @@ function RondeBinding({ addScore, onDone }) {
   const [hint, setHint] = useState(null);
   const [laatste, setLaatste] = useState(null);
   const [popup, setPopup] = useState(false);
+  // elke ronde een eigen volgorde, zodat de symptomen niet al gesorteerd klaarliggen
+  const [kaarten] = useState(() => schud(R1_SYMPTOMEN));
 
-  const over = R1_SYMPTOMEN.filter(
+  const over = kaarten.filter(
     (s) => !geplaatst.vroeg.includes(s.id) && !geplaatst.laat.includes(s.id)
   );
 
@@ -1197,8 +1226,10 @@ function RondeWelkeWoning({ addScore, onDone }) {
   const [laatste, setLaatste] = useState(null);
   const [flashFout, setFlashFout] = useState(null);
   const [popup, setPopup] = useState(false);
+  // de kaarten staan in de code op risicovolgorde; elke ronde opnieuw schudden
+  const [sets] = useState(() => R4_SETS.map((s) => ({ ...s, kaarten: schud(s.kaarten) })));
 
-  const set = R4_SETS[setIdx];
+  const set = sets[setIdx];
   const volgende = Object.keys(ranks).length + 1;
   const setKlaar = Object.keys(ranks).length === set.kaarten.length;
 
@@ -1223,7 +1254,7 @@ function RondeWelkeWoning({ addScore, onDone }) {
   };
 
   const verder = () => {
-    if (setIdx + 1 >= R4_SETS.length) {
+    if (setIdx + 1 >= sets.length) {
       setPopup(true);
     } else {
       setSetIdx(setIdx + 1);
@@ -1315,7 +1346,7 @@ function RondeWelkeWoning({ addScore, onDone }) {
 
       {setKlaar && !popup && (
         <GameButton onClick={verder} variant="green" className="mt-4">
-          {setIdx + 1 >= R4_SETS.length ? "Rondes afronden" : "Volgende inspectieronde"}
+          {setIdx + 1 >= sets.length ? "Rondes afronden" : "Volgende inspectieronde"}
         </GameButton>
       )}
 
@@ -1376,8 +1407,10 @@ function RondeLetOpJezelf({ addScore, onDone }) {
   const [goedGekozen, setGoedGekozen] = useState(false);
   const [flashFout, setFlashFout] = useState(null);
   const [popup, setPopup] = useState(false);
+  // antwoordopties elke ronde in een eigen volgorde
+  const [scenarios] = useState(() => R5_SCENARIOS.map(schudOpties));
 
-  const scen = R5_SCENARIOS[idx];
+  const scen = scenarios[idx];
 
   const kies = (i) => {
     if (goedGekozen || popup) return;
@@ -1394,7 +1427,7 @@ function RondeLetOpJezelf({ addScore, onDone }) {
   };
 
   const verder = () => {
-    if (idx + 1 >= R5_SCENARIOS.length) {
+    if (idx + 1 >= scenarios.length) {
       setPopup(true);
     } else {
       setIdx(idx + 1);
@@ -1425,7 +1458,7 @@ function RondeLetOpJezelf({ addScore, onDone }) {
         Ronde 3: Let op jezelf
       </h2>
       <p className="text-xs mb-3 text-center font-medium" style={{ color: C.brown }}>
-        Scenario {idx + 1} van {R5_SCENARIOS.length}. Wat doe je?
+        Scenario {idx + 1} van {scenarios.length}. Wat doe je?
       </p>
 
       <div
@@ -1463,7 +1496,7 @@ function RondeLetOpJezelf({ addScore, onDone }) {
             {scen.uitleg}
           </p>
           <GameButton onClick={verder} variant="green" className="mt-3">
-            {idx + 1 >= R5_SCENARIOS.length ? "Ronde afronden" : "Volgend scenario"}
+            {idx + 1 >= scenarios.length ? "Ronde afronden" : "Volgend scenario"}
           </GameButton>
         </>
       )}
