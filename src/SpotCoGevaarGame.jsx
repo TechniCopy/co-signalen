@@ -1519,7 +1519,8 @@ function StartScreen({ onStart }) {
   return (
     <div className="flex-1 flex flex-col">
       <div className="py-3 px-5 text-center" style={{ backgroundColor: C.bgHeader }}>
-        <span className="text-white font-bold italic text-lg">Spot het CO-gevaar</span>
+        <img src="/brand/logo-light.png" alt="PractiQ" className="mx-auto mb-2" style={{ height: 30 }} />
+        <div className="text-white font-bold italic text-lg">Spot het CO-gevaar</div>
       </div>
       <div className="flex-1 flex flex-col items-center justify-center gap-5 p-8">
         <div className="rounded-full p-7 border-4" style={{ backgroundColor: C.beigeLight, borderColor: C.brownText }}>
@@ -1727,7 +1728,7 @@ export default function SpotCoGevaarGame({ initialScreen = "start", onExit }) {
           {lives === 0 && screen !== "end" && <GameOver onRestart={herstartRonde} />}
 
           <div className="py-2 text-center text-[10px]" style={{ color: C.brown }}>
-            Studium B.V. · Vakmanschap CO · MicroGame · Spot het CO-gevaar · eindterm 2.1, leerdoelen 1 en 2
+            PractiQ · Vakmanschap CO · MicroGame · Spot het CO-gevaar · eindterm 2.1, leerdoelen 1 en 2
           </div>
         </div>
       </DragProvider>
